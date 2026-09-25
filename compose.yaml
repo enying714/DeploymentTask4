@@ -1,0 +1,26 @@
+name: task4
+services:
+  hello:
+    build: ./Task4_2_HelloWeb
+    image: ${DOCKERHUB_USER:?Set DOCKERHUB_USER in .env}/enying-task4.2:1.0
+    ports:
+      - "127.0.0.1:8080:8000"
+    restart: unless-stopped
+  study:
+    build: ./Task4_3_StudyManager
+    image: ${DOCKERHUB_USER:?Set DOCKERHUB_USER in .env}/enying-task4.3:1.0
+    ports:
+      - "127.0.0.1:8081:8000"
+    environment:
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY in .env}
+    volumes:
+      - study-data:/data
+    restart: unless-stopped
+  grade:
+    build: ./Task4_4_GradeCLI
+    image: ${DOCKERHUB_USER:?Set DOCKERHUB_USER in .env}/enying-task4.4:1.0
+    profiles: [cli]
+    stdin_open: true
+    tty: true
+volumes:
+  study-data:

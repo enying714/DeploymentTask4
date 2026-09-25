@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Study Task Manager</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body><main>
+<header><p class="eyebrow">STUDENT WORKSPACE</p><h1>Study Task Manager</h1>
+<p>A little organisation. More room to focus.</p></header>
+<p class="notice">Shared demonstration board: everyone can view and change tasks. Use sample data only.</p>
+<section aria-labelledby="add-title"><h2 id="add-title">Plan your next task</h2>
+{% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+<form method="post" action="{{ url_for('add') }}" class="add-form">
+<input type="hidden" name="csrf" value="{{ csrf }}">
+<label>Task name<input name="name" maxlength="120" required value="{{ values.get('name', '') }}" placeholder="Finish Docker report"></label>
+<label>Subject<input name="subject" maxlength="60" required value="{{ values.get('subject', '') }}" placeholder="SWE40006"></label>
+<label>Due date<input type="date" name="due_date" required value="{{ values.get('due_date', '') }}"></label>
+<label>Priority<select name="priority">{% for priority in ['Low','Medium','High'] %}<option {% if values.get('priority', 'Medium') == priority %}selected{% endif %}>{{ priority }}</option>{% endfor %}</select></label>
+<button type="submit">Add task</button></form></section>
+<section aria-labelledby="list-title"><div class="section-heading"><h2 id="list-title">Your study plan</h2><span>{{ tasks|length }} task{{ '' if tasks|length == 1 else 's' }}</span></div>
+{% if tasks %}<div class="table-wrap"><table><thead><tr><th>Task / subject</th><th>Due date</th><th>Priority</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+{% for task in tasks %}<tr><td><strong>{{ task.name }}</strong><small>{{ task.subject }}</small></td><td>{{ task.due_date }}</td><td><span class="badge {{ task.priority|lower }}">{{ task.priority }}</span></td>
+<td>{% if task.completed %}Complete{% elif task.due_date < today %}<span class="overdue">Overdue</span>{% else %}Pending{% endif %}</td>
+<td><div class="actions">{% if not task.completed %}<form method="post" action="{{ url_for('complete', task_id=task.id) }}"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="secondary" aria-label="Mark {{ task.name }} complete">Complete</button></form>{% endif %}
+<form method="post" action="{{ url_for('delete', task_id=task.id) }}"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="delete" aria-label="Delete {{ task.name }}">Delete</button></form></div></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<p class="empty">Your plan starts here. Add your first study task above.</p>{% endif %}</section>
+<footer>SWE40006 · Deployment Portfolio · Task 4.3</footer></main></body></html>
