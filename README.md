@@ -283,7 +283,3 @@ The earlier local VM and temporary tunnel depended on the laptop remaining avail
 ## Repository Purpose
 
 This repository provides the source and configuration for independent assignment verification. Include its public repository URL in the submitted report alongside the Docker Hub links and deployed web addresses. The report contains the captioned evidence and detailed investigation; this README supplies the execution instructions.
-
-Do not publish `.env`, `task4-study.env`, SSH private keys, credentials, SQLite databases or generated deployment archives. Generated output such as `artifacts/` is not required in the public source repository. Docker images are distributed through Docker Hub rather than committed as binary archives.
-
-The material in `docs/` includes the original preparation walkthrough, code explanation and evidence guidance. This README records the final Azure deployment and published image names. The Python base tag and dependency resolution can change between builds; preserve the image digest in the report when exact image identification is needed.
